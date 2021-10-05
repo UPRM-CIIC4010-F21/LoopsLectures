@@ -86,7 +86,7 @@ public:
 
     // EXERCISE #5: Returns true if there are at least two Account's of the same type and
     // with equal balances within the parametter vector.
-    static int hasDuplicates(vector<Account> accounts);
+    static bool hasDuplicates(vector<Account> accounts);
 
     // EXERCISE #6: Remove the first occurrence of an Account with a negative balance if
     // such an Account exists in the pameter vector.  Leaves vector unchanged otherwise.
@@ -108,7 +108,11 @@ public:
 // type within the vector of Account's. Returns -1 if no such Account exists.
 int Account::findByType(vector<Account> accounts, AccountType type)
 {
-    // YOUR CODE HERE
+    for(int i=0; i<accounts.size(); i++) {
+        if (accounts[i].getType()==type) {
+            return i;
+        }
+    }
     return -1;
 }
 
@@ -117,7 +121,11 @@ int Account::findByType(vector<Account> accounts, AccountType type)
 int Account::countByType(vector<Account> accounts, AccountType type)
 {
     int result = 0;
-    // YOUR CODE HERE
+    for (int i=0; i<accounts.size(); i++) {
+        if (accounts[i].getType()==type) {
+            result ++;
+        }
+    }
     return result;
 }
 
@@ -125,8 +133,16 @@ int Account::countByType(vector<Account> accounts, AccountType type)
 // parametter vector. Returns -1 if the vector is empty.
 int Account::largestBalance(vector<Account> accounts)
 {
-    // YOUR CODE HERE
-    return -1;
+    if (accounts.empty()) return -1;
+    int maxAccountPosition = 0;
+    for (int i = 1; i < accounts.size(); i++)
+    {
+        if (accounts[i].getBalance() > accounts[maxAccountPosition].getBalance())
+        {
+            maxAccountPosition = i;
+        }
+    }
+    return maxAccountPosition;
 }
 
 // EXERCISE #4: Returns the average balance of all the Account's of the parameter type
@@ -134,15 +150,37 @@ int Account::largestBalance(vector<Account> accounts)
 // of that type.
 double Account::averageBalance(vector<Account> accounts, AccountType type)
 {
-    // YOUR CODE HERE
-    return -1;
+    double sum = 0;
+    int count = 0;
+    for (int i = 0; i < accounts.size(); i++)
+    {
+        if (accounts[i].getType()==type) {
+            sum += accounts[i].getBalance();
+            count++;
+        }
+    }
+    if (count > 0)
+    {
+        return sum / count;
+    }
+    else
+    {
+        return -1;
+    }
 }
 
 // EXERCISE #5: Returns true if there are at least two Account's of the same type and
 // with tehe same account number within the parametter vector.
-int Account::hasDuplicates(vector<Account> accounts)
+bool Account::hasDuplicates(vector<Account> accounts)
 {
-    // YOUR CODE HERE
+    for (int left = 0; left < accounts.size(); left++) {
+        for (int right = left+1; right < accounts.size(); right++) {
+            if ((accounts[left].getAccNo() == accounts[right].getAccNo()) &&
+                (accounts[left].getType() == accounts[right].getType())) {
+                    return true;
+                }
+        }
+    }
     return false;
 }
 
@@ -150,7 +188,16 @@ int Account::hasDuplicates(vector<Account> accounts)
 // such an Account exists in the pameter vector.  Leaves vector unchanged otherwise.
 void Account::removeFirstNegative(vector<Account> &accounts)
 {
-    // YOUR CODE HERE
+    int negativePos = -1;
+    for (int i=0; i<accounts.size(); i++) {
+        if (accounts[i].getBalance() < 0) {
+            negativePos = i;
+            break;
+        }
+    }
+    if (negativePos > 0) {
+        accounts.erase(accounts.begin()+negativePos);
+    }
 }
 
 // EXERCISE #7: Remove all ocurrences of Accounts with a negative balances if
