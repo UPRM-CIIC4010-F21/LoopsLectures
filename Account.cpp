@@ -226,7 +226,20 @@ void Account::removeAllNegative(vector<Account> &accounts)
 // in the parameter vectors.
 vector<Account> Account::combine(vector<Account> v1, vector<Account> v2)
 {
-    vector<Account> result;
+    vector<Account> result(v1);
+
+    for(int i=0; i<v2.size(); i++) {
+        for (int j=0; j<result.size(); j++) {
+            if ((v2[i].getAccNo() == result[j].getAccNo())  &&
+                (v2[i].getType() == result[j].getType())) {
+                    result[j].setBalance(result[j].getBalance()+v2[i].getBalance());
+                }
+                else {
+                    result.push_back(v2[i]);
+                }
+        }
+
+    }
     
     return result;
 }
